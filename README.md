@@ -50,3 +50,15 @@ fn main() {              // Program entry point
 
 ### Basic syntax
 * [Table](https://google.github.io/comprehensive-rust/basic-syntax/scalar-types.html)
+
+### Compound types
+* Arrays: 
+    * Are defined with type and size `let items: [i8; 2] = [1; 2];` in compile time    
+    * Printing
+        * debug  `{items:?}`
+        * default `{items}`
+        * pretty `{items:#?}`
+* Tuples
+    * Have a defined size
+    * Can be accesed by the index of the value `let t: (i8, bool) = (7, true);` -> `t.0`
+    * Empty tuple `()`, used to indicate no return type or void type
