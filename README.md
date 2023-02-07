@@ -62,3 +62,16 @@ fn main() {              // Program entry point
     * Have a defined size
     * Can be accesed by the index of the value `let t: (i8, bool) = (7, true);` -> `t.0`
     * Empty tuple `()`, used to indicate no return type or void type
+
+### References
+* Mutable reference
+```swift
+let mut x: i32 = 1;
+let ref_x: &mut i32 = &mut x;
+*ref_x = 20;
+```
+* Non mutable reference
+```swift
+let mut x: i32 = 1;
+let ref_x: & i32 = &x;
+```
