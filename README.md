@@ -75,3 +75,23 @@ let ref_x: &mut i32 = &mut x;
 let mut x: i32 = 1;
 let ref_x: & i32 = &x;
 ```
+
+### Slices
+* Slices always borrow from another object.
+Being 
+```rust 
+let a: [i32; 6] = [1,2,3,4,5,6];
+```
+* Exlusive access
+```rust
+&a[2..4]
+```
+* Inclusive access
+```rust
+&a[2..=4]
+```
+* Start/End index can be omited, in this case it will work as inclusive
+
+### String vs str
+* `&str` an immutable reference to a string slice.
+* `String` a mutable string buffer
