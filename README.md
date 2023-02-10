@@ -24,7 +24,7 @@
 * Build optimized release `cargo build --release`
 * Adding dependencies to `Cargo.toml` and running any cargo command it will resolve and compile them automatically
 
-## DAY 1
+## DAY 1 MORNING
 
 ### Small sample
 * Collatz conjecture
@@ -95,3 +95,72 @@ let a: [i32; 6] = [1,2,3,4,5,6];
 ### String vs str
 * `&str` an immutable reference to a string slice.
 * `String` a mutable string buffer
+
+### Functions
+* Param's type declared after name, `fn fizzbuzz(n: u32) -> ()`
+* Return type can be omitted if it is the unit type `()`, `fn fizzbuzz(n: u32)`
+* Last instruction in a function body is the return, it can be omitted 
+```rust
+fn is_divisible_by(lhs: u32, rhs: u32) -> bool {
+    if rhs == 0 {
+        return false;  // Corner case, early return
+    }
+    lhs % rhs == 0     // The last expression in a block is the return value
+}
+```
+
+### Methods
+* Functions that are associated with a particular type. The first argument of a method is an instance of the type it is associated with.
+* They use the keyword `impl` to extend the type's behaviour.
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn inc_width(&mut self, delta: u32) {
+        self.width += delta;
+    }
+}
+```
+
+### Function Overloading
+* Not supported
+* Each function has only one implementation: fixed parameters and types.
+* Default values not supported
+* Generics supported
+```rust
+fn pick_one<T>(a: T, b: T) -> T {
+    if std::process::id() % 2 == 0 { a } else { b }
+}
+```
+
+### Exercise Implicit Conversions
+Rust will not automatically apply implicit conversions between types (unlike C++). You can see this in a program like this:
+```rust
+fn multiply(x: i16, y: i16) -> i16 {
+    x * y
+}
+fn main() {
+    let x: i8 = 15;
+    let y: i16 = 1000;
+    println!("{x} * {y} = {}", multiply(x, y));
+}
+```
+
+The Rust integer types all implement the From<T> and Into<T> traits to let us convert between them. The From<T> trait has a single from() method and similarly, the Into<T> trait has a single into() method. Implementing these traits is how a type expresses that it can be converted into another type.
+
+The standard library has an implementation of From<i8> for i16, which means that we can convert a variable x of type i8 to an i16 by calling i16::from(x). Or, simpler, with x.into(), because From<i8> for i16 implementation automatically create an implementation of Into<i16> for i8.
+
+The same applies for your own From implementations for your own types, so it is sufficient to only implement From to get a respective Into implementation automatically.
+
+Execute the above program and look at the compiler error.
+
+Update the code above to use into() to do the conversion.
+
+Change the types of x and y to other things (such as f32, bool, i128) to see which types you can convert to which other types. Try converting small types to big types and the other way around. Check the standard library documentation to see if From<T> is implemented for the pairs you check.
+[DOC](https://doc.rust-lang.org/std/convert/trait.From.html)
