@@ -148,7 +148,7 @@ fn multiply(x: i16, y: i16) -> i16 {
 fn main() {
     let x: i8 = 15;
     let y: i16 = 1000;
-    println!("{x} * {y} = {}", multiply(x, y));
+    println!("{x} * {y} = {}", multiply(x.into(), y));
 }
 ```
 
@@ -164,3 +164,23 @@ Update the code above to use into() to do the conversion.
 
 Change the types of x and y to other things (such as f32, bool, i128) to see which types you can convert to which other types. Try converting small types to big types and the other way around. Check the standard library documentation to see if From<T> is implemented for the pairs you check.
 [DOC](https://doc.rust-lang.org/std/convert/trait.From.html)
+
+### Exercise Arrays and For loops
+```rust
+fn main() {
+    let array = [10, 20, 30];
+    print!("Iterating over array:");
+    for n in array {
+        print!(" {n}");
+    }
+    println!();
+
+    print!("Iterating over range:");
+    for i in 0..3 {
+        print!(" {}", array[i]);
+    }
+    println!();
+}
+```
+Use the above to write a function pretty_print which pretty-print a matrix and a function transpose which will transpose a matrix (turn rows into columns):
+Hard-code both functions to operate on 3 × 3 matrices.
