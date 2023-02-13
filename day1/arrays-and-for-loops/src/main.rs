@@ -30,3 +30,20 @@ fn main() {
     println!("transposed:");
     pretty_print(&transposed);
 }
+
+// ANCHOR: tests
+#[test]
+fn test_transpose() {
+    let matrix = [
+        [101, 102, 103],
+        [201, 202, 203],
+        [301, 302, 303],
+    ];
+    let expected = [
+        [101, 201, 301],
+        [102, 202, 302],
+        [103, 203, 303],
+    ];
+    let trasposed = transpose(matrix);
+    assert_eq!(trasposed, expected);
+}
