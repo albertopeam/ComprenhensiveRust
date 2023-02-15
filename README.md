@@ -184,3 +184,20 @@ fn main() {
 ```
 Use the above to write a function pretty_print which pretty-print a matrix and a function transpose which will transpose a matrix (turn rows into columns):
 Hard-code both functions to operate on 3 × 3 matrices.
+
+### Variables type inference
+* Static types
+* Type inference
+```rust
+fn takes_u32(x: u32) {
+    println!("u32: {x}");
+}
+fn main() {
+    let x = 10;
+
+    takes_u32(x);
+}
+```
+* Inmutable variable bindings(can't change the type once initialized)
+
+### Static varibales
