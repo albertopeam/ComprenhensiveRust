@@ -200,4 +200,129 @@ fn main() {
 ```
 * Inmutable variable bindings(can't change the type once initialized)
 
-### Static varibales
+### Static and constant varibales
+* contants declare constant values. These represent a value, not a memory address.
+* statics declare global variables. These represent a memory address. They would be rarely used: the primary use cases are global locks, global atomic counters, and interfacing with legacy C libraries.
+
+### Scopes and shadowing
+* Shadow is available from outer scopes and variables from the same scope
+```rust
+fn main() {
+    let a = 10;
+    println!("before: {a}");
+    {
+        let a = "hello";
+        println!("inner scope: {a}");
+        let a = true;
+        println!("shadowed in inner scope: {a}");
+    }
+    println!("after: {a}");
+}
+```
+
+### Memory management
+* Traditionally, languages have fallen into two broad categories:
+
+    * Full control via manual memory management: C, C++, Pascal, …
+    * Full safety via automatic memory management at runtime: Java, Python, Go, Haskell, …
+* Rust offers a new mix:
+    * Full control and safety via compile time enforcement of correct memory management.
+
+### Stack VS Heap
+* Stack: Continuous area of memory for local variables.
+    * Values have fixed sizes known at compile time.
+    * Extremely fast: just move a stack pointer.
+    * Easy to manage: follows function calls.
+    * Great memory locality.
+
+* Heap: Storage of values outside of function calls.
+    * Values have dynamic sizes determined at runtime.
+    * Slightly slower than the stack: some book-keeping needed.
+    * No guarantee of memory locality.
+
+### Stack memory
+* Creating a String puts fixed-sized data on the stack and dynamically sized data on the heap:
+```rust
+fn main() {
+    let s1 = String::from("Hello");
+}
+```
+```
+Stack               |   Heap
+ s1:                |
+    ptr   ------------> |H|e|l|l|o|
+    len:5           |
+    capacity:5      |
+```
+* We can inspect the memory layout with unsafe code. However, you should point out that this is rightfully unsafe!
+```rust
+fn main() {
+    let mut s1 = String::from("Hello");
+    s1.push(' ');
+    s1.push_str("world");
+    // DON'T DO THIS AT HOME! For educational purposes only.
+    // String provides no guarantees about its layout, so this could lead to
+    // undefined behavior.
+    unsafe {
+        let (capacity, ptr, len): (usize, usize, usize) = std::mem::transmute(s1);
+        println!("ptr = {ptr:#x}, len = {len}, capacity = {capacity}");
+    }
+}
+```
+
+### Manual Memory Management
+[Website](https://google.github.io/comprehensive-rust/memory-management/manual.html)
+
+### Scope-Based Memory Management
+[Website](https://google.github.io/comprehensive-rust/memory-management/scope-based.html)
+
+### Automatic Memory Management
+[Website](https://google.github.io/comprehensive-rust/memory-management/garbage-collection.html)
+
+### Memory Management in Rust
+* Safe and correct like Java, but without a garbage collector.
+* Depending on which abstraction (or combination of abstractions) you choose, can be a single unique pointer, reference counted, or atomically reference counted.
+* Scope-based like C++, but the compiler enforces full adherence.
+* A Rust user can choose the right abstraction for the situation, some even have no cost at runtime like C.
+
+### Comparison
+[Website](https://google.github.io/comprehensive-rust/memory-management/comparison.html)
+
+### Ownership
+All variable bindings have a scope where they are valid and it is an error to use a variable outside its scope
+```rust
+struct Point(i32, i32);
+fn main() {
+    {
+        let p = Point(3, 4);
+        println!("x: {}", p.0);
+    }
+    println!("y: {}", p.1);
+}
+```
+* At the end of the scope, the variable is dropped and the data is freed.
+* A destructor can run here to free up resources.
+* We say that the variable owns the value.
+
+### Ownership - Moves in Function Calls
+When you pass a value to a function, the value is assigned to the function parameter. This transfers ownership
+With the first call to say_hello, main gives up ownership of name. Afterwards, name cannot be used anymore within main.
+* main can retain ownership if it passes name as a reference (&name) and if say_hello accepts a reference as a parameter.
+* Alternatively, main can pass a clone of name in the first call (name.clone()).
+* Rust makes it harder than C++ to inadvertently create copies by making move semantics the default, and by forcing programmers to make clones explicit.
+```rust
+fn say_hello(name: String) {
+    println!("Hello {name}")
+}
+
+fn main() {
+    let name = String::from("Alice");
+    say_hello(name);
+    // say_hello(name);
+}
+```
+
+### Copying and cloning
+
+
+
