@@ -323,6 +323,33 @@ fn main() {
 ```
 
 ### Copying and cloning
+* Move semantics are the default, certain types are copied by default. These types implement the Copy trait.
+```rust
+fn main() {
+    let x = 42;
+    let y = x;
+    println!("x: {x}");
+    println!("y: {y}");
+}
+```
+* You can opt-in your own types to use copy semantics:
+```rust
+#[derive(Copy, Clone, Debug)]
+struct Point(i32, i32);
 
+fn main() {
+    let p1 = Point(3, 4);
+    let p2 = p1;
+    println!("p1: {p1:?}");
+    println!("p2: {p2:?}");
+}
+```
+* After the assignment, both p1 and p2 own their own data.
+* We can also use p1.clone() to explicitly copy the data.
+* `Derive`: is a way to generate code in Rust at compile time. In this case the default implementations of Copy and Clone traits are generated.
 
-
+* Clone vs Copy
+    * Copying refers to bitwise copies of memory regions and does not work on arbitrary objects.
+    * Copying does not allow for custom logic.
+    * Copying does not work on types that implement the Drop trait.
+    * Cloning is a more general operation and also allows for custom behavior by implementing the Clone trait.    
