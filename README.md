@@ -391,3 +391,29 @@ fn main() {
 * The above code does not compile because a is borrowed as mutable (through c) and as immutable (through b) at the same time.
 * Move the println! statement for b before the scope that introduces c to make the code compile.
 * After that change, the compiler realizes that b is only ever used before the new mutable borrow of a through c. This is a feature of the borrow checker called “non-lexical lifetimes”.
+
+### Lifetimes
+Lifetimes are always inferred by the compiler: you cannot assign a lifetime yourself.
+* Lifetime annotations create constraints; the compiler verifies that there is a valid solution.
+
+### Lifetimes in Function Calls
+In addition to borrowing its arguments, a function can return a borrowed value:
+```rust
+#[derive(Debug)]
+struct Point(i32, i32);
+
+fn left_most<'a>(p1: &'a Point, p2: &'a Point) -> &'a Point {
+    if p1.0 < p2.0 { p1 } else { p2 }
+}
+
+fn main() {
+    let p1: Point = Point(10, 10);
+    let p2: Point = Point(20, 20);
+    let p3: &Point = left_most(&p1, &p2);
+    println!("left-most point: {:?}", p3);
+}
+```
+* 'a is a generic parameter, it is inferred by the compiler.
+* Lifetimes start with ' and 'a is a typical default name.
+* Read &'a Point as “a borrowed Point which is valid for at least the lifetime a”.
+* The at least part is important when parameters are in different scopes.
